@@ -37,8 +37,6 @@ public class LerArquivoCadastro implements Runnable {
 
 		connectToDataBase();
 
-		// Entender como o pessoal da Oi dispara o robo
-		// TODO: Alterar a lógica pra retirar o loop infinito
 		while (true) {
 			try {
 				if (populaAgendaCadastro()) {
@@ -119,7 +117,8 @@ public class LerArquivoCadastro implements Runnable {
 		
 	    
 		PreparedStatement pstm = null;
-		String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO not in ('M', 'N', 'O')";
+		// foi adicionado pra retornar apenas os AGENDATIPOARQUIVO = C
+                String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO not in ('C')";
 		
 		try{
 			pstm = getCon().prepareStatement(sql);
@@ -145,6 +144,7 @@ public class LerArquivoCadastro implements Runnable {
 		boolean achou = false;
 		boolean isPreenchido = false;
 
+		// Acho que nao precisa duplcar agenda... pois o nome do arquivo juntamente com seu tipo ja sao do tipo OCT
 		String sql = "INSERT INTO agenda (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, (select NVL(MAX(arquivotipo), 'NAO ENCONTRADO') from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), (select NVL(MAX(arquivoordem), 99) from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), 0)";
 
 		//alterar o not in para receber apenas cadastro do OCT

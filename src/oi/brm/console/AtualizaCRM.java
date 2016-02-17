@@ -137,6 +137,8 @@ public class AtualizaCRM implements Runnable {
 					
 					// Pegar a informa«„o se È oct ou multi
 					// pegar o campo micro-servico-sva 
+					//ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("OCT");
+					
 					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("BF");
 					ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DATA_NASCIMENTO",con));
 					
@@ -462,9 +464,8 @@ public class AtualizaCRM implements Runnable {
 		}		
 		return nome;
 	}
-	//ajsutar interfacecrm_oct
 	public void updateRegistroFila(Fila fila, int status, String msg) {
-		String sql = "update interfacecrm intcrm set intcrm.INTERFACECRMSTATUS = ?, intcrm.INTERFACECRMDATAENVIO = sysdate, intcrm.interfacecrmmsg = ? where  intcrm.id_interfacecrm = ?";
+		String sql = "update interfacecrm_oct intcrm set intcrm.INTERFACECRMSTATUS = ?, intcrm.INTERFACECRMDATAENVIO = sysdate, intcrm.interfacecrmmsg = ? where  intcrm.id_interfacecrm = ?";
 		PreparedStatement pstm = null;
 
 		try {
@@ -541,7 +542,7 @@ public class AtualizaCRM implements Runnable {
 	
 	// sempre ajustar interfacecrm_processo pra interfacecrm_processooct
 	public void resgataDadosArquivo(BigDecimal id) {
-		String sql = "select interfacecrm_processoheader, interfacecrm_processotrailer from interfacecrm_processo where id_arquivoimportacao = " + id;
+		String sql = "select interfacecrm_processoheader, interfacecrm_processotrailer from interfacecrm_octprocesso where id_arquivoimportacao = " + id;
 		ResultSet rs = null;
 		Statement stm = null;
 		try {
@@ -582,11 +583,9 @@ public class AtualizaCRM implements Runnable {
 	}
 
 	    
-	//Nao muda a tabela interfacecrm
 	public List<Fila> resgataFila(BigDecimal id) {
-		String sql = "select interfacecrmxml, id_interfacecrm, interfacecrmlinha, interfacecrmmetodo from interfacecrm where interfacecrmstatus = 0 and id_arquivoimportacao = "
+		String sql = "select interfacecrmxml, id_interfacecrm, interfacecrmlinha, interfacecrmmetodo from interfacecrm_oct where interfacecrmstatus = 0 and id_arquivoimportacao = "
 				+ id;
-		//logger.warn(sql);
 		ResultSet rs = null;
 		Statement stm = null;
 		List<Fila> lista = new ArrayList<Fila>();

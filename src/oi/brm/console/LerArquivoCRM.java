@@ -71,7 +71,7 @@ public class LerArquivoCRM implements Runnable{
 	public int retornaQuantidadePendente() {
 
 		PreparedStatement pstm = null;
-		String sql = "select count(1) as quantidade from interfacecrm_processo where  interfacecrm_processosessionid is null";
+		String sql = "select count(1) as quantidade from interfacecrm_octprocesso where  interfacecrm_processosessionid is null";
 		ResultSet rs = null;
 		Statement stm = null;
 		try {
@@ -113,68 +113,68 @@ public class LerArquivoCRM implements Runnable{
 		return 0;
 	}
 	
-// Ajustar as consultas pra receber a nova tabela interfacecrm_processoOCT	
-public BigDecimal retornaIdArquivoImportacao(Connection conexao) {
-		
-		String sql = "select max(id_arquivoimportacao) as id_arquivoimportacao from interfacecrm_processo  where interfacecrm_processosessionid = "
-				+ UtilsOCT.retornaSessionID(conexao, con, logger);
-		ResultSet rs = null;
-		Statement stm = null;
-		PreparedStatement pstm = null;
-		sql = "update interfacecrm_processo set interfacecrm_processosessionid = "
-				+ UtilsOCT.retornaSessionID(conexao,con, logger)
-				+ " where id_interfacecrm_processo in (select max(id_interfacecrm_processo) from interfacecrm_processo where  interfacecrm_processosessionid is null )";
-		
-		try {
-			pstm = conexao.prepareStatement(sql);
-			pstm.execute();
-			pstm.close();
-			conexao.commit();
-		} catch (Exception e) {
-			logger.warn(e.getMessage());
-			LogDAO.inseriLogErro(con, null, e.getMessage(), "SISTEMA");
-		} finally {
-			UtilsOCT.closePreparedStatement(pstm, con, logger);
-		}
-
-		sql = "select max(id_arquivoimportacao) as id_arquivoimportacao from interfacecrm_processo  where interfacecrm_processosessionid = "
-				+ UtilsOCT.retornaSessionID(conexao, con, logger);
-		try {
-			stm = conexao.createStatement();
-			rs = stm.executeQuery(sql);
-			while (rs.next()) {
-				 return rs.getBigDecimal("id_arquivoimportacao");
-			}
-			conexao.commit();
-		} catch (Exception e) {
-			logger.warn(e.getMessage());
-			LogDAO.inseriLogErro(con, null, e.getMessage(), "SISTEMA");
-		} finally {
-			if (stm != null) {
-				try {
-					stm.close();
-				} catch (SQLException sqe) {
-					logger.warn(sqe.getMessage());
-					LogDAO.inseriLogErro(con, null, sqe.getMessage(), "SISTEMA");
-				} catch (RuntimeException re) {
-					logger.warn(re.getMessage());
-					LogDAO.inseriLogErro(con, null, re.getMessage(), "SISTEMA");
-				}
-			}
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqe) {
-					logger.warn(sqe.getMessage());
-					LogDAO.inseriLogErro(con, null, sqe.getMessage(), "SISTEMA");
-				} catch (RuntimeException re) {
-					logger.warn(re.getMessage());
-					LogDAO.inseriLogErro(con, null, re.getMessage(), "SISTEMA");
-				}
-			}
-		}
-		return null;
-	}
+        // Ajustar as consultas pra receber a nova tabela interfacecrm_processoOCT
+        public BigDecimal retornaIdArquivoImportacao(Connection conexao) {
+    
+            String sql = "select max(id_arquivoimportacao) as id_arquivoimportacao from interfacecrm_octprocesso  where interfacecrm_processosessionid = "
+                    + UtilsOCT.retornaSessionID(conexao, con, logger);
+            ResultSet rs = null;
+            Statement stm = null;
+            PreparedStatement pstm = null;
+            sql = "update interfacecrm_octprocesso set interfacecrm_processosessionid = "
+                    + UtilsOCT.retornaSessionID(conexao, con, logger)
+                    + " where id_interfacecrm_octprocesso in (select max(id_interfacecrm_processo) from interfacecrm_octprocesso where  interfacecrm_processosessionid is null )";
+    
+            try {
+                pstm = conexao.prepareStatement(sql);
+                pstm.execute();
+                pstm.close();
+                conexao.commit();
+            } catch (Exception e) {
+                logger.warn(e.getMessage());
+                LogDAO.inseriLogErro(con, null, e.getMessage(), "SISTEMA");
+            } finally {
+                UtilsOCT.closePreparedStatement(pstm, con, logger);
+            }
+    
+            sql = "select max(id_arquivoimportacao) as id_arquivoimportacao from interfacecrm_octprocesso  where interfacecrm_processosessionid = "
+                    + UtilsOCT.retornaSessionID(conexao, con, logger);
+            try {
+                stm = conexao.createStatement();
+                rs = stm.executeQuery(sql);
+                while (rs.next()) {
+                    return rs.getBigDecimal("id_arquivoimportacao");
+                }
+                conexao.commit();
+            } catch (Exception e) {
+                logger.warn(e.getMessage());
+                LogDAO.inseriLogErro(con, null, e.getMessage(), "SISTEMA");
+            } finally {
+                if (stm != null) {
+                    try {
+                        stm.close();
+                    } catch (SQLException sqe) {
+                        logger.warn(sqe.getMessage());
+                        LogDAO.inseriLogErro(con, null, sqe.getMessage(), "SISTEMA");
+                    } catch (RuntimeException re) {
+                        logger.warn(re.getMessage());
+                        LogDAO.inseriLogErro(con, null, re.getMessage(), "SISTEMA");
+                    }
+                }
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException sqe) {
+                        logger.warn(sqe.getMessage());
+                        LogDAO.inseriLogErro(con, null, sqe.getMessage(), "SISTEMA");
+                    } catch (RuntimeException re) {
+                        logger.warn(re.getMessage());
+                        LogDAO.inseriLogErro(con, null, re.getMessage(), "SISTEMA");
+                    }
+                }
+            }
+            return null;
+        }
 
 	
 	public Connection getCon() {

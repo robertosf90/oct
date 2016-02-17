@@ -597,7 +597,7 @@ public class Principal implements Runnable {
 	        //Adiciona um novo tipo em arquivoTipo do tipo Cadastro OCT = C
 	        // alterar o not in (C) para receber o cadastro do OCT
 	        // Precisamos saber os nomes dos arquivos do tipo OCT (Falta ser passado pro Douglas- OI)
-		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo not in ('M', 'N', 'O') ";
+		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('C') ";
 		ResultSet rs = null;
 		Statement stm = null;
 		List<String> lista = new ArrayList<String>();
@@ -656,12 +656,18 @@ public class Principal implements Runnable {
 		origem.delete();
 	}
 	
-	// Criar uma tabela nova interfacecrm_oct e interfacecrm_octprocesso (o ideal eh criar uma nova tabela pois senao o robo oct vai alterar a interfacecrm do bff e bfm
+	
+	//tudo feito OK
+	
+	// Criar uma tabela nova interfacecrm_oct e interfacecrm_octprocesso  
+	//(o ideal eh criar uma nova tabela pois senao o robo oct vai alterar a interfacecrm do bff e bfm
 	// pra evitar esse problema o ideal é criar apenas uma tabela pra manipular o oct)
-	// Criação do script de criação e criação do rollback
+	
+	// Criação do script de criação e criação do rollback (avaliar a possibilidade de fazer o rollback) 
+	
 	public void desmarcaInterfaceCRM(){
             PreparedStatement pstm = null;
-            String sql = "update interfacecrm set interfacecrmstatus = 0 where interfacecrmstatus = 2";
+            String sql = "update interfacecrm_oct set interfacecrmstatus = 0 where interfacecrmstatus = 2";
 
             try{
                     pstm = con.prepareStatement(sql);
@@ -690,7 +696,7 @@ public class Principal implements Runnable {
 
     public void desmarcaInterfaceCRMProcesso(){
             PreparedStatement pstm = null;
-            String sql = "update interfacecrm_processo set interfacecrm_processostatus = 0, interfacecrm_processosessionid = null where id_arquivoimportacao in ( select distinct id_arquivoimportacao from interfacecrm where interfacecrmstatus = 0 )";
+            String sql = "update interfacecrm_octprocesso set interfacecrm_processostatus = 0, interfacecrm_processosessionid = null where id_arquivoimportacao in ( select distinct id_arquivoimportacao from interfacecrm_oct where interfacecrmstatus = 0 )";
 
             try{
                     pstm = con.prepareStatement(sql);
