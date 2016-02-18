@@ -41,7 +41,6 @@ public class LerArquivoCadastro implements Runnable {
 			try {
 				if (populaAgendaCadastro()) {
 					if (inseriLinhaBanco() > 0) {
-					    //Essa parte Guilherme vai fazer
 						consomeCadastro(getArquivo(), getTipo());
 					}
 
@@ -112,13 +111,10 @@ public class LerArquivoCadastro implements Runnable {
 	}
 
 	
-	// Analisar se precisa duplicar a tabela Agenda e 
 	private void atualizaAgendaIncioConsumo(String arquivo) {
 		
-	    
 		PreparedStatement pstm = null;
-		// foi adicionado pra retornar apenas os AGENDATIPOARQUIVO = C
-                String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO not in ('C')";
+                String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO in ('C')";
 		
 		try{
 			pstm = getCon().prepareStatement(sql);
@@ -144,10 +140,7 @@ public class LerArquivoCadastro implements Runnable {
 		boolean achou = false;
 		boolean isPreenchido = false;
 
-		// Acho que nao precisa duplcar agenda... pois o nome do arquivo juntamente com seu tipo ja sao do tipo OCT
 		String sql = "INSERT INTO agenda (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, (select NVL(MAX(arquivotipo), 'NAO ENCONTRADO') from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), (select NVL(MAX(arquivoordem), 99) from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), 0)";
-
-		//alterar o not in para receber apenas cadastro do OCT
 		List<String> lista = Principal.retornaListaArquivosCadastro();
 		try {
 			String[] filhos = null;
@@ -270,7 +263,6 @@ public class LerArquivoCadastro implements Runnable {
 		}
 	}
 	
-	//Analisar se precisa duplicar a tabela TEM_CONSUMO_CADASTRO
 	public void gravaLinha(String linha, int ordem) throws SQLException{
 		PreparedStatement pstm = null;
 		String sql = "INSERT INTO TEMP_CONSUMO_CADASTRO (LINHA, ORDEM) VALUES (?, ?)";
@@ -293,7 +285,7 @@ public class LerArquivoCadastro implements Runnable {
 	
 	public void atualizaAgendaFimConsumo(String arquivo){
 		PreparedStatement v_PreparedStatement = null;
-		String sql = "UPDATE agenda SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO not in ('M', 'N', 'O')";
+		String sql = "UPDATE agenda SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
 
 		try{
 			v_PreparedStatement = getCon().prepareStatement(sql);
@@ -311,7 +303,7 @@ public class LerArquivoCadastro implements Runnable {
 	}
 	public void atualizaAgendaFimConsumoFalha(String arquivo){
 		PreparedStatement v_PreparedStatement = null;
-		String sql = "DELETE FROM agenda WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO not in ('M', 'N', 'O')";
+		String sql = "DELETE FROM agenda WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
 
 		try{
 			v_PreparedStatement = getCon().prepareStatement(sql);

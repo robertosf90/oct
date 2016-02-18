@@ -116,7 +116,6 @@ public class AtualizaCRM implements Runnable {
 			this.updateRegistroFila(listaretorno.get(i), 2, msg);
 			// Conecta no Web Service
 			try {
-			        // Thina adicionou o systemsource verificar com ele
 			        
 				if (listaretorno.get(i).getInterfacecrmmetodo() == 1){
 					BeneficioFiscalPurchaseServiceLocator locator = new BeneficioFiscalPurchaseServiceLocator();
@@ -139,7 +138,7 @@ public class AtualizaCRM implements Runnable {
 					// pegar o campo micro-servico-sva 
 					//ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("OCT");
 					
-					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("BF");
+					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("OCT");
 					ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DATA_NASCIMENTO",con));
 					
 					
@@ -540,7 +539,6 @@ public class AtualizaCRM implements Runnable {
 		}
 	}
 	
-	// sempre ajustar interfacecrm_processo pra interfacecrm_processooct
 	public void resgataDadosArquivo(BigDecimal id) {
 		String sql = "select interfacecrm_processoheader, interfacecrm_processotrailer from interfacecrm_octprocesso where id_arquivoimportacao = " + id;
 		ResultSet rs = null;

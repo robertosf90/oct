@@ -1,6 +1,11 @@
 --
 -- INTERFACECRM_OCT_HIST  (Table) 
 --
+
+/**
+ * 
+ *  Analisar necessidade de criação dessa tabela 
+ */
 CREATE TABLE INTERFACECRM_OCT_HIST
 (
   ANOMES                   NUMBER               DEFAULT TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMM')),

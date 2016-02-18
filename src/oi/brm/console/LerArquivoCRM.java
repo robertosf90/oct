@@ -55,7 +55,6 @@ public class LerArquivoCRM implements Runnable{
 					LogDAO.inseriLogErro(con, null, e.getMessage(), "SISTEMA");
 				}
 			}else{
-				//logger.warn("NÃO EXISTEM DADOS PARA SER INTEGRADO COM O CRM.");
 				LogDAO.inseriLogSucesso(con, null, "NÃO EXISTEM DADOS PARA SER INTEGRADO COM O CRM.", "SISTEMA");
 				try {
 					Thread.sleep(15000);
@@ -67,7 +66,6 @@ public class LerArquivoCRM implements Runnable{
 		
 	}
 	
-	// Ajustar pra receber a nova tabela interfacecrm_processooct
 	public int retornaQuantidadePendente() {
 
 		PreparedStatement pstm = null;
@@ -113,7 +111,6 @@ public class LerArquivoCRM implements Runnable{
 		return 0;
 	}
 	
-        // Ajustar as consultas pra receber a nova tabela interfacecrm_processoOCT
         public BigDecimal retornaIdArquivoImportacao(Connection conexao) {
     
             String sql = "select max(id_arquivoimportacao) as id_arquivoimportacao from interfacecrm_octprocesso  where interfacecrm_processosessionid = "

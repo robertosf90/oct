@@ -1,6 +1,12 @@
 --
 -- INTERFACECRM_OCT_ERRO  (Table) 
 --
+
+
+/**
+ * 
+ *  Analisar necessidade de criação dessa tabela 
+ */
 CREATE TABLE INTERFACECRM_OCT_ERRO
 (
   INTERFACECRM_ERRODESCRICAO  VARCHAR2(300 BYTE) NOT NULL,

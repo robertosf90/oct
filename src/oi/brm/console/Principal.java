@@ -593,9 +593,8 @@ public class Principal implements Runnable {
 	}
 
 	public static List<String> retornaListaArquivosCadastro() {
-	        // Tipo X = Cadastro 
+	        
 	        //Adiciona um novo tipo em arquivoTipo do tipo Cadastro OCT = C
-	        // alterar o not in (C) para receber o cadastro do OCT
 	        // Precisamos saber os nomes dos arquivos do tipo OCT (Falta ser passado pro Douglas- OI)
 		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('C') ";
 		ResultSet rs = null;
@@ -656,14 +655,6 @@ public class Principal implements Runnable {
 		origem.delete();
 	}
 	
-	
-	//tudo feito OK
-	
-	// Criar uma tabela nova interfacecrm_oct e interfacecrm_octprocesso  
-	//(o ideal eh criar uma nova tabela pois senao o robo oct vai alterar a interfacecrm do bff e bfm
-	// pra evitar esse problema o ideal é criar apenas uma tabela pra manipular o oct)
-	
-	// Criação do script de criação e criação do rollback (avaliar a possibilidade de fazer o rollback) 
 	
 	public void desmarcaInterfaceCRM(){
             PreparedStatement pstm = null;
