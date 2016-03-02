@@ -516,7 +516,7 @@ public class AtualizaCRM implements Runnable {
 	}
 	
 	public void atualizaArquivoImportacao(String arquivo_nome, BigDecimal id_arquivoimportacao) {
-		String sql = "update arquivoimportacao set arquivoimportacaoretorno  = ? where  id_arquivoimportacao = ?";
+		String sql = "update arquivoimportacao_oct set arquivoimportacaoretorno  = ? where  id_arquivoimportacao = ?";
 		
 		PreparedStatement pstm = null;
 

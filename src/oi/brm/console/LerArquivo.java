@@ -231,7 +231,7 @@ public class LerArquivo implements Runnable {
 	public void gravaLinha(int id, String linha, String path, String empresa,
 			Integer nrlinha) {
 		PreparedStatement pstm = null;
-		String sql = "INSERT /*+ APPEND */ INTO logimportacao (ID_ARQUIVOIMPORTACAO, LOGIMPORTACAONRLINHA, LOGIMPORTACAOLINHA, LOGIMPORTACAOSTATUS, LOGIMPORTACAODATA, LOGIMPORTACAOTIPOARQUIVO, ID_EMPRESA ) VALUES (?, ?, ?, ?, sysdate, '"
+		String sql = "INSERT /*+ APPEND */ INTO logimportacao_oct (ID_ARQUIVOIMPORTACAO, LOGIMPORTACAONRLINHA, LOGIMPORTACAOLINHA, LOGIMPORTACAOSTATUS, LOGIMPORTACAODATA, LOGIMPORTACAOTIPOARQUIVO, ID_EMPRESA ) VALUES (?, ?, ?, ?, sysdate, '"
 				+ retornaTipoArquivo() + "', ?) ";
 		try {
 			pstm = getCon().prepareStatement(sql);
@@ -293,7 +293,7 @@ public class LerArquivo implements Runnable {
 	}
 
 	public int retornaIDCabecalho() {
-		String sql = "select max(ID_ARQUIVOIMPORTACAO) as id from arquivoimportacao where ARQUIVOIMPORTACAOCAMINHO = '"
+		String sql = "select max(ID_ARQUIVOIMPORTACAO) as id from arquivoimportacao_oct where ARQUIVOIMPORTACAOCAMINHO = '"
 				+ getArquivo() + "' ";
 		ResultSet rs = null;
 		Statement stm = null;
@@ -346,10 +346,9 @@ public class LerArquivo implements Runnable {
 		return empresa;
 	}
 
-	// Verificar se precisa duplicar a tabela
 	public void gravaCabecalho() {
 		PreparedStatement pstm = null;
-		String sql = "INSERT INTO arquivoimportacao (ARQUIVOIMPORTACAOCAMINHO, ARQUIVOIMPORTACAODATA, ARQUIVOIMPORTACAOTIPO) VALUES (?, sysdate, '"
+		String sql = "INSERT INTO arquivoimportacao_oct (ARQUIVOIMPORTACAOCAMINHO, ARQUIVOIMPORTACAODATA, ARQUIVOIMPORTACAOTIPO) VALUES (?, sysdate, '"
 				+ retornaTipoArquivo() + "') ";
 
 		try {
@@ -381,7 +380,7 @@ public class LerArquivo implements Runnable {
 
 	public void atualizaCabecalho(int quantidade, int id) {
 		PreparedStatement pstm = null;
-		String sql = "UPDATE arquivoimportacao SET ARQUIVOIMPORTACAOSTATUS = 1, ARQUIVOIMPORTACAOQTLINHAS = ?, ARQUIVOIMPORTACAOQTLINHASOK = ?, ARQUIVOIMPORTACAOQTLINHASERRO = 0 WHERE ID_ARQUIVOIMPORTACAO = ?";
+		String sql = "UPDATE arquivoimportacao_oct SET ARQUIVOIMPORTACAOSTATUS = 1, ARQUIVOIMPORTACAOQTLINHAS = ?, ARQUIVOIMPORTACAOQTLINHASOK = ?, ARQUIVOIMPORTACAOQTLINHASERRO = 0 WHERE ID_ARQUIVOIMPORTACAO = ?";
 
 		try {
 			pstm = getCon().prepareStatement(sql);
@@ -414,7 +413,7 @@ public class LerArquivo implements Runnable {
 
 	public void atualizaAgendaFimConsumo(String arquivo) {
 		PreparedStatement pstm = null;
-		String sql = "UPDATE agenda SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDATIPOARQUIVO = '"
+		String sql = "UPDATE agenda_oct SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDATIPOARQUIVO = '"
 				+ retornaTipoArquivo() + "'";
 		try {
 			pstm = getCon().prepareStatement(sql);
@@ -445,7 +444,7 @@ public class LerArquivo implements Runnable {
 
 	public void atualizaAgendaIncioConsumo(String arquivo) {
 		PreparedStatement pstm = null;
-		String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO = '"
+		String sql = "UPDATE agenda_oct SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO = '"
 				+ retornaTipoArquivo() + "'";
 
 		try {
@@ -476,7 +475,7 @@ public class LerArquivo implements Runnable {
 	}
 
 	public String retornaArquivoPendente() {
-		String sql = "select AGENDAARQUIVO from agenda where AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO = '"
+		String sql = "select AGENDAARQUIVO from agenda_oct where AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO = '"
 				+ retornaTipoArquivo() + "'";
 		ResultSet rs = null;
 		Statement stm = null;

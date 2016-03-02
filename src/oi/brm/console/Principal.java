@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 public class Principal implements Runnable {
 
 	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
+//	private static final String MESSAGES_PROPERTIES = "/etc/robooct/robooct.properties";  
 
 	public static String tipo;
 	public static String login;
@@ -270,7 +271,7 @@ public class Principal implements Runnable {
 			}
 
 			//insere o arquivo na agenda
-			sql = "INSERT INTO agenda (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, ?, (SELECT NVL(MAX(ARQUIVOORDEM), 99) FROM ARQUIVO WHERE ARQUIVONOME = ?), 0) ";
+			sql = "INSERT INTO agenda_oct (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, ?, (SELECT NVL(MAX(ARQUIVOORDEM), 99) FROM ARQUIVO WHERE ARQUIVONOME = ?), 0) ";
 			pstm = _lerarquivo.getCon().prepareStatement(sql);
 			pstm.setString(1, _lerarquivo.getArquivo());
 			pstm.setString(2, retornaTipoArquivo(_lerarquivo.getArquivo()));

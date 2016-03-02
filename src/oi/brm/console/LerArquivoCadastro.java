@@ -114,7 +114,7 @@ public class LerArquivoCadastro implements Runnable {
 	private void atualizaAgendaIncioConsumo(String arquivo) {
 		
 		PreparedStatement pstm = null;
-                String sql = "UPDATE agenda SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO in ('C')";
+                String sql = "UPDATE agenda_oct SET AGENDAINICIOCONSUMO = sysdate, AGENDASTATUS = 1 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAINICIOCONSUMO is null and AGENDATIPOARQUIVO in ('C')";
 		
 		try{
 			pstm = getCon().prepareStatement(sql);
@@ -140,7 +140,7 @@ public class LerArquivoCadastro implements Runnable {
 		boolean achou = false;
 		boolean isPreenchido = false;
 
-		String sql = "INSERT INTO agenda (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, (select NVL(MAX(arquivotipo), 'NAO ENCONTRADO') from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), (select NVL(MAX(arquivoordem), 99) from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), 0)";
+		String sql = "INSERT INTO agenda_oct (AGENDAARQUIVO, AGENDATIPOARQUIVO, AGENDAORDEMPROC, AGENDASTATUS) VALUES (?, (select NVL(MAX(arquivotipo), 'NAO ENCONTRADO') from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), (select NVL(MAX(arquivoordem), 99) from arquivo where instr(UPPER(trim(?)),ARQUIVONOME,1) >0), 0)";
 		List<String> lista = Principal.retornaListaArquivosCadastro();
 		try {
 			String[] filhos = null;
@@ -285,7 +285,7 @@ public class LerArquivoCadastro implements Runnable {
 	
 	public void atualizaAgendaFimConsumo(String arquivo){
 		PreparedStatement v_PreparedStatement = null;
-		String sql = "UPDATE agenda SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
+		String sql = "UPDATE agenda_oct SET AGENDAFIMCONSUMO = sysdate, AGENDASTATUS = 2 WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
 
 		try{
 			v_PreparedStatement = getCon().prepareStatement(sql);
@@ -303,7 +303,7 @@ public class LerArquivoCadastro implements Runnable {
 	}
 	public void atualizaAgendaFimConsumoFalha(String arquivo){
 		PreparedStatement v_PreparedStatement = null;
-		String sql = "DELETE FROM agenda WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
+		String sql = "DELETE FROM agenda_oct WHERE UPPER(AGENDAARQUIVO) = UPPER(?) and AGENDAFIMCONSUMO is null and AGENDAINICIOPROC is null and AGENDATIPOARQUIVO in ('C')";
 
 		try{
 			v_PreparedStatement = getCon().prepareStatement(sql);
