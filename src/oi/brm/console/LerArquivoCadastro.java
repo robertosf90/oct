@@ -208,7 +208,7 @@ public class LerArquivoCadastro implements Runnable {
 								pstm.close();
 								getCon().commit();
 								arquivo = nome.getName();
-								UtilsOCT.closePreparedStatement(pstm,con,logger);
+//								UtilsOCT.closePreparedStatement(pstm,con,logger);
 								return true;
 							} catch (Exception e) {
 								logger.warn("[ERRO ROBO OCT] - "
@@ -266,9 +266,11 @@ public class LerArquivoCadastro implements Runnable {
 	
 	public void gravaLinha(String linha, int ordem) throws SQLException{
 		PreparedStatement pstm = null;
-		String sql = "INSERT INTO TEMP_CONSUMO_CADASTRO (LINHA, ORDEM) VALUES (?, ?)";
+		String sql = "INSERT INTO temp_consumo_cadastro (LINHA, ORDEM) VALUES (?, ?)";
 		
 		try{
+		    logger.warn(sql.replace("?", "'"
+                            + linha + "'"));
 			pstm = getCon().prepareStatement(sql);
 			pstm.setString(1,  linha);
 			pstm.setInt(2,  ordem);
@@ -325,7 +327,7 @@ public class LerArquivoCadastro implements Runnable {
 		CallableStatement cs = null;
 		try{
 			
-			cs = getCon().prepareCall("{call up_sva_le_txt_cadastro(?,?) }");
+			cs = getCon().prepareCall("{call up_oct_le_txt_cadastro(?,?) }");
 			cs.setString(1, arquivo);
 			cs.registerOutParameter(2, OracleTypes.VARCHAR);
 			cs.execute();

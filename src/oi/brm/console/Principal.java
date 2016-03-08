@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 public class Principal implements Runnable {
 
-	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
-//	private static final String MESSAGES_PROPERTIES = "/etc/robooct/robooct.properties";  
+//	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
+	private static final String MESSAGES_PROPERTIES = "/etc/octrobo/robooct.properties";  
 
 	public static String tipo;
 	public static String login;
@@ -597,7 +597,7 @@ public class Principal implements Runnable {
 	        
 	        //Adiciona um novo tipo em arquivoTipo do tipo Cadastro OCT = C
 	        // Precisamos saber os nomes dos arquivos do tipo OCT (Falta ser passado pro Douglas- OI)
-		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('C') ";
+		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('T') ";
 		ResultSet rs = null;
 		Statement stm = null;
 		List<String> lista = new ArrayList<String>();
