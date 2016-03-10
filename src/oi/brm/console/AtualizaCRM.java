@@ -127,18 +127,16 @@ public class AtualizaCRM implements Runnable {
 					
 					IG_FLD_CUST_PROFILE_ARRAY ig_fld_cust_profile_array = new IG_FLD_CUST_PROFILE_ARRAY();
 					ig_fld_cust_profile_array.setIG_FLD_SEGMENT("CLIENTE");
-					ig_fld_cust_profile_array.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con));
+					ig_fld_cust_profile_array.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
 					ig_fld_cust_profile_array.setIG_FLD_CITY_CODE(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "COD_IBGE_CID",con));
 					ig_fld_cust_profile_array.setIG_FLD_ADDRESS_NUMBER(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NUMERO_LOGRADOURO",con));
 					ig_fld_cust_profile_array.setIG_FLD_ADDRESS_COMPLEMENT(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "COMPLEMENTO",con));
 					ig_fld_cust_profile_array.setIG_FLD_NEIGHBORHOOD(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "BAIRRO",con));
 					ig_fld_cust_profile_array.setIG_FLD_COUNTRY_CODE("01058");
 					
-					// Pegar a informaÇão se é oct ou multi
-					// pegar o campo micro-servico-sva 
-					//ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("OCT");
+					String systemSource = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA", con);
 					
-					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE("OCT");
+					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE(systemSource.toUpperCase().contains("MULT") ? "MULT" : "OCT");
 					ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DATA_NASCIMENTO",con));
 					
 					
@@ -217,15 +215,20 @@ public class AtualizaCRM implements Runnable {
 					}
 					
 					payinfoigcobbilingarray.setIG_FLD_CONTRACT_NO(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CONTRATO",con));
-					payinfoigcobbilingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con));
+					payinfoigcobbilingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
 					payinfoigcobbilingarray.setSERVICE_ID("55" + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DDD",con) + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "MSISDN",con));
 					payinfoigcobbilingarray.setIG_FLD_SERVICE_PROVIDER("Telemar");
 					payinfoigcobbilingarray.setIG_FLD_TERMINAL_HOLDER("1");
 					payinfoigcobbilingarray.setIG_FLD_RELATIONSHIP("Próprio");
 					
 					beneficiofiscalpurchaseflistin.setIG_FLD_COBILLING_INFO(payinfoigcobbilingarray);
-					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE1(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA",con)));
-					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE2(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA",con)));
+					
+					String [] split = listaretorno.get(i).getInterfacecrmlinha().split("[|\n]");
+					
+					String  valor = split[10];
+					
+					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE1(new BigInteger(valor));
+					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE2(new BigInteger(valor));
 					
 					BeneficioFiscaloPurchaseFlistOut retorno =  cliente.IG_OP_SCM_BENEFICIO_FISCAL_PURCHASE(beneficiofiscalpurchaseflistin);
 					
@@ -235,7 +238,7 @@ public class AtualizaCRM implements Runnable {
 					if( statusFlag == 0)
 					{
 						
-						atualizaPOID(retorno.getPOID(), UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con));
+						atualizaPOID(retorno.getPOID(), UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
 						status = 1;
 						quantidade++;
 						LogDAO.inseriLogSucesso(con, null, msg, "SISTEMA");						
@@ -254,8 +257,8 @@ public class AtualizaCRM implements Runnable {
 					
 					// aqui entram as chamadas dos métodos do Web Service
 					BeneficioFiscalCancelFlistIn beneficiofiscalcancelflistin = new BeneficioFiscalCancelFlistIn();
-					beneficiofiscalcancelflistin.setPOID(retornaPOID(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con)));
-					beneficiofiscalcancelflistin.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con));
+					beneficiofiscalcancelflistin.setPOID(retornaPOID(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con)));
+					beneficiofiscalcancelflistin.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
 					
 					PAYINFOIGCOBILLINGARRAY payinfoigcobillingarray = new PAYINFOIGCOBILLINGARRAY();
 					if (branch.equalsIgnoreCase("STC")){
@@ -263,7 +266,7 @@ public class AtualizaCRM implements Runnable {
 					}else{
 						payinfoigcobillingarray.setIG_FLD_BRANCH("9");
 					}
-					payinfoigcobillingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CPF_CNPJ",con));
+					payinfoigcobillingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
 					payinfoigcobillingarray.setSERVICE_ID("55" + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DDD",con) + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "MSISDN",con));
 					payinfoigcobillingarray.setIG_FLD_SERVICE_PROVIDER("TELEMAR");
 					payinfoigcobillingarray.setIG_FLD_TERMINAL_HOLDER("1");

@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 public class Principal implements Runnable {
 
-//	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
-	private static final String MESSAGES_PROPERTIES = "/etc/octrobo/robooct.properties";  
+	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
+//	private static final String MESSAGES_PROPERTIES = "/etc/octrobo/robooct.properties";  
 
 	public static String tipo;
 	public static String login;

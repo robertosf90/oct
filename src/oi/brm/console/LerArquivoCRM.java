@@ -120,7 +120,7 @@ public class LerArquivoCRM implements Runnable{
             PreparedStatement pstm = null;
             sql = "update interfacecrm_octprocesso set interfacecrm_processosessionid = "
                     + UtilsOCT.retornaSessionID(conexao, con, logger)
-                    + " where id_interfacecrm_octprocesso in (select max(id_interfacecrm_processo) from interfacecrm_octprocesso where  interfacecrm_processosessionid is null )";
+                    + " where id_interfacecrm_processo in (select max(id_interfacecrm_processo) from interfacecrm_octprocesso where  interfacecrm_processosessionid is null )";
     
             try {
                 pstm = conexao.prepareStatement(sql);

@@ -208,7 +208,6 @@ public class LerArquivoCadastro implements Runnable {
 								pstm.close();
 								getCon().commit();
 								arquivo = nome.getName();
-//								UtilsOCT.closePreparedStatement(pstm,con,logger);
 								return true;
 							} catch (Exception e) {
 								logger.warn("[ERRO ROBO OCT] - "
