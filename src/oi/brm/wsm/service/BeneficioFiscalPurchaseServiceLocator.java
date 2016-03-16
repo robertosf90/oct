@@ -22,7 +22,7 @@ public class BeneficioFiscalPurchaseServiceLocator extends org.apache.axis.clien
     }
 
     // Use to get a proxy class for BeneficioFiscalPurchaseServiceImplPort
-    private java.lang.String BeneficioFiscalPurchaseServiceImplPort_address = "http://vip-brm-services-batch.oi.infra:80/infranetwebsvc/beneficioFiscalPurchase";
+    private java.lang.String BeneficioFiscalPurchaseServiceImplPort_address = "http://hanoi-brm-services-oct.dev.infra:80/infranetwebsvc/beneficioFiscalPurchase";
     // HOMOLOGACAO private java.lang.String BeneficioFiscalPurchaseServiceImplPort_address = "http://10.145.0.179:80/infranetwebsvc/beneficioFiscalPurchase";
     
 

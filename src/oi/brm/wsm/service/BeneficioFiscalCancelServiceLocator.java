@@ -23,7 +23,7 @@ public class BeneficioFiscalCancelServiceLocator extends org.apache.axis.client.
 
     // Use to get a proxy class for BeneficioFiscalCancelServiceImplPort
     
-    private java.lang.String BeneficioFiscalCancelServiceImplPort_address = "http://vip-brm-services-batch.oi.infra:80/infranetwebsvc/beneficioFiscalCancel";
+    private java.lang.String BeneficioFiscalCancelServiceImplPort_address = "http://hanoi-brm-services-oct.dev.infra:80/infranetwebsvc/beneficioFiscalCancel";
     
     //HOMOLOGACAO private java.lang.String BeneficioFiscalCancelServiceImplPort_address = "http://10.145.0.179:80/infranetwebsvc/beneficioFiscalCancel";
 
