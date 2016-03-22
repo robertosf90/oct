@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 public class Principal implements Runnable {
 
-	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
-//	private static final String MESSAGES_PROPERTIES = "/etc/octrobo/robooct.properties";  
+//	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
+	private static final String MESSAGES_PROPERTIES = "/opt/robo/oct/robo-oct.properties";  
 
 	public static String tipo;
 	public static String login;
@@ -382,8 +382,6 @@ public class Principal implements Runnable {
 		return null;
 	}
 
-	// TODO: ADICIONAR A EXTESÃO DO ARQUIVO QUE REPRESENTA O OCT
-	// Pendencia o nome do arquivo de movimentos (falta o douglas definir)
 	public static List<String> retornaListaArquivosMovimento() {
 		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('Q') ";
 		ResultSet rs = null;

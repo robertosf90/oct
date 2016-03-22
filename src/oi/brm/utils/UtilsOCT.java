@@ -9,14 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.Iterator;
+
+import oi.brm.console.LogDAO;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-
-import oi.brm.console.LogDAO;
 
 public class UtilsOCT {
 	
@@ -126,5 +127,13 @@ public class UtilsOCT {
 		
 		return "";
 	}
+	
+        public static String dateToStringTimestamp(Date date) {
+            return String.valueOf(dateToTimestamp(date));
+        }
+    
+        public static Long dateToTimestamp(Date date) {
+            return date.getTime() / 1000;
+        }
 
 }

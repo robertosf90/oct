@@ -137,7 +137,12 @@ public class AtualizaCRM implements Runnable {
 					String systemSource = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA", con);
 					
 					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE(systemSource.toUpperCase().contains("MULT") ? "MULT" : "OCT");
-					ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DATA_NASCIMENTO",con));
+					
+                                        String dateBirthdayString = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(),
+                                                "DATA_NASCIMENTO", con);
+                                        Date parseDate = new Date(dateBirthdayString);
+                                        
+                                        ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.dateToStringTimestamp(parseDate));
 					
 					
 					if (UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SEXO",con).equalsIgnoreCase("F")){
@@ -223,12 +228,8 @@ public class AtualizaCRM implements Runnable {
 					
 					beneficiofiscalpurchaseflistin.setIG_FLD_COBILLING_INFO(payinfoigcobbilingarray);
 					
-					String [] split = listaretorno.get(i).getInterfacecrmlinha().split("[|\n]");
-					
-					String  valor = split[10];
-					
-					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE1(new BigInteger(valor));
-					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE2(new BigInteger(valor));
+					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE1(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA_NUM",con)));
+					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE2(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA_NUM",con)));
 					
 					BeneficioFiscaloPurchaseFlistOut retorno =  cliente.IG_OP_SCM_BENEFICIO_FISCAL_PURCHASE(beneficiofiscalpurchaseflistin);
 					
@@ -255,7 +256,6 @@ public class AtualizaCRM implements Runnable {
 					BeneficioFiscalCancelServiceImplPortBindingStub cliente = (BeneficioFiscalCancelServiceImplPortBindingStub) locator
 							.getBeneficioFiscalCancelServiceImplPort();
 					
-					// aqui entram as chamadas dos métodos do Web Service
 					BeneficioFiscalCancelFlistIn beneficiofiscalcancelflistin = new BeneficioFiscalCancelFlistIn();
 					beneficiofiscalcancelflistin.setPOID(retornaPOID(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con)));
 					beneficiofiscalcancelflistin.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
