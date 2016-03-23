@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 public class Principal implements Runnable {
 
-//	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
-	private static final String MESSAGES_PROPERTIES = "/opt/robo/oct/robo-oct.properties";  
+	private static final String MESSAGES_PROPERTIES = "C:/robooct.properties";
+//	private static final String MESSAGES_PROPERTIES = "/opt/robo/oct/robo-oct.properties";  
 
 	public static String tipo;
 	public static String login;
@@ -383,7 +383,7 @@ public class Principal implements Runnable {
 	}
 
 	public static List<String> retornaListaArquivosMovimento() {
-		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('Q') ";
+		String sql = "select ARQUIVONOME from arquivo WHERE arquivotipo in ('Q','M') ";
 		ResultSet rs = null;
 		Statement stm = null;
 		List<String> lista = new ArrayList<String>();
