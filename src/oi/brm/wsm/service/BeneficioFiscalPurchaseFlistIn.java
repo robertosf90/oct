@@ -7,6 +7,10 @@
 
 package oi.brm.wsm.service;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement
 public class BeneficioFiscalPurchaseFlistIn  implements java.io.Serializable {
     private java.lang.String POID;
 

@@ -7,6 +7,12 @@
 
 package oi.brm.wsm.service;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.apache.log4j.Logger;
+
 
 public class BeneficioFiscalPurchaseServiceImplPortBindingStub extends org.apache.axis.client.Stub implements
         oi.brm.wsm.service.BeneficioFiscalPurchaseServiceImpl {
@@ -223,7 +229,7 @@ public class BeneficioFiscalPurchaseServiceImplPortBindingStub extends org.apach
 
         setRequestHeaders(_call);
         setAttachments(_call);
-
+        
         try {
             java.lang.Object _resp = _call.invoke(new java.lang.Object[] { beneficioFiscalPurchaseInput });
 

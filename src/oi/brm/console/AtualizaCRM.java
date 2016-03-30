@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import oi.brm.utils.UtilsOCT;
 import oi.brm.wsm.service.BeneficioFiscalCancelFlistIn;
 import oi.brm.wsm.service.BeneficioFiscalCancelFlistOut;
@@ -136,11 +140,29 @@ public class AtualizaCRM implements Runnable {
 					
 					String systemSource = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA", con);
 					
+					
+					
+                                        String ddd = systemSource.toUpperCase().equals("3GOCT") ? UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "DDD_MOVEL", con) : UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "DDD_FIXO", con);
+					
+					
+					String phone =  systemSource.toUpperCase().equals("3GOCT") ? UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "PHONE_MOVEL", con) : UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "PHONE_FIXO", con);
+					
+					
 					ig_fld_cust_profile_array.setIG_FLD_SYSTEM_SOURCE(systemSource.toUpperCase().contains("MULT") ? "MULT" : "OCT");
 					
                                         String dateBirthdayString = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(),
                                                 "DATA_NASCIMENTO", con);
-                                        Date parseDate = new Date(dateBirthdayString);
+                                        Date parseDate = null;
+                                        if (dateBirthdayString != null && !dateBirthdayString.trim().isEmpty()) {
+                                            parseDate  = new Date(dateBirthdayString);
+                                        }else{
+                                            parseDate = new Date("31/12/1969 21:00:00");
+                                        }
+                                        
                                         
                                         ig_fld_cust_profile_array.setIG_FLD_BIRTHDAY_T(UtilsOCT.dateToStringTimestamp(parseDate));
 					
@@ -190,7 +212,7 @@ public class AtualizaCRM implements Runnable {
 					oi.brm.wsm.service.PHONES_ARRAY PHONES  = new oi.brm.wsm.service.PHONES_ARRAY();
 					PHONES.setElem(new NonNegativeInteger("0"));
 					PHONES.setTYPE(new BigInteger("1"));
-					PHONES.setPHONE("55" + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DDD",con) + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "MSISDN",con));
+					PHONES.setPHONE("55" + ddd.substring(1,3) + phone);
 					
 					
 					
@@ -221,7 +243,7 @@ public class AtualizaCRM implements Runnable {
 					
 					payinfoigcobbilingarray.setIG_FLD_CONTRACT_NO(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "CONTRATO",con));
 					payinfoigcobbilingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
-					payinfoigcobbilingarray.setSERVICE_ID("55" + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DDD",con) + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "MSISDN",con));
+					payinfoigcobbilingarray.setSERVICE_ID("55" + ddd.substring(1,3) + phone);
 					payinfoigcobbilingarray.setIG_FLD_SERVICE_PROVIDER("Telemar");
 					payinfoigcobbilingarray.setIG_FLD_TERMINAL_HOLDER("1");
 					payinfoigcobbilingarray.setIG_FLD_RELATIONSHIP("Próprio");
@@ -230,6 +252,19 @@ public class AtualizaCRM implements Runnable {
 					
 					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE1(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA_NUM",con)));
 					beneficiofiscalpurchaseflistin.setIG_FLD_SERVICE2(new BigInteger(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA_NUM",con)));
+					
+					
+                                        JAXBContext jaxbContext;
+                                        try {
+                                            jaxbContext = JAXBContext.newInstance(BeneficioFiscalPurchaseFlistIn.class);
+                                            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                                            jaxbMarshaller.marshal(beneficiofiscalpurchaseflistin, System.out);
+                                            logger.warn(System.out);
+                                        } catch (JAXBException e) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+
 					
 					BeneficioFiscaloPurchaseFlistOut retorno =  cliente.IG_OP_SCM_BENEFICIO_FISCAL_PURCHASE(beneficiofiscalpurchaseflistin);
 					
@@ -266,8 +301,21 @@ public class AtualizaCRM implements Runnable {
 					}else{
 						payinfoigcobillingarray.setIG_FLD_BRANCH("9");
 					}
+					String systemSource = UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "SERVICO_SVA", con);
+					
+					
+					String ddd = systemSource.toUpperCase().equals("3GOCT") ? UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "DDD_MOVEL", con) : UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "DDD_FIXO", con);
+                                        
+                                        
+                                        String phone =  systemSource.toUpperCase().equals("3GOCT") ? UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "PHONE_MOVEL", con) : UtilsOCT.retornaValorXML(listaretorno
+                                                .get(i).getInterfacecrmxml(), "PHONE_FIXO", con);
+					
+					
 					payinfoigcobillingarray.setIG_FLD_CPF_CNPJ(UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "NRO_DOCUMENTO",con));
-					payinfoigcobillingarray.setSERVICE_ID("55" + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "DDD",con) + UtilsOCT.retornaValorXML(listaretorno.get(i).getInterfacecrmxml(), "MSISDN",con));
+					payinfoigcobillingarray.setSERVICE_ID("55" + ddd.substring(1,3) + phone);
 					payinfoigcobillingarray.setIG_FLD_SERVICE_PROVIDER("TELEMAR");
 					payinfoigcobillingarray.setIG_FLD_TERMINAL_HOLDER("1");
 					payinfoigcobillingarray.setIG_FLD_RELATIONSHIP("Próprio");
@@ -284,10 +332,8 @@ public class AtualizaCRM implements Runnable {
 									.getInterfacecrmxml(), "CPF_CNPJ", con)
 							+ " - "
 							+ "55"
-							+ UtilsOCT.retornaValorXML(listaretorno.get(i)
-									.getInterfacecrmxml(), "DDD", con)
-							+ UtilsOCT.retornaValorXML(listaretorno.get(i)
-									.getInterfacecrmxml(), "MSISDN", con));
+							+ddd.substring(1,3)
+							+ phone);
 					
 					if (retorno.getSTATUS_FLAGS().intValue() == 0){
 						status = 1;
